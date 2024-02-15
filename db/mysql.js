@@ -44,13 +44,14 @@ class MySqlDB {
 
     async query(sql, params){
         const pool = this.#getPool()
-        const result = await pool.query(mysql.format(sql, params));
-        return result
+        const s = mysql.format(sql, params)
+        console.log(s)
+        return await pool.query(s);
     }
 
 }
 
 
-module.exports = function(host="127.0.0.1", port=3306, user="root", password=undefined){
-    return new MySql(host, port, user, password)
+module.exports = function(host=undefined, port=undefined, user=undefined, password=undefined){
+    return new MySql(host||"127.0.0.1", port||3306, user||"root", password)
 }
