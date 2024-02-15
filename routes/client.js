@@ -1,19 +1,19 @@
 const express = require("express")
 const router = express.Router()
-const client = require("../models/client")
+const books = require("../models/books")
 const weixinUtil = require("../utils/weixin-util")
 
-router.get("/books/:bid", async (req, res) => {
+router.get("/books/:bussinessId", async (req, res) => {
     const clientId = weixinUtil.getOpenId(req)
-    const bussinessId = req.params.bid
-    res.send(await client.getUnfinishedBooks(clientId, bussinessId))
+    const bussinessId = req.params.bussinessId
+    res.send(await books.getUnfinishedBooksForClient({clientId, bussinessId}))
 })
 
-router.delete("/books/:bid/:bookId", async (req, res) => {
+router.delete("/books/:bussinessId/:bookId", async (req, res) => {
     const clientId = weixinUtil.getOpenId(req)
-    const bid = req.params.bid
+    const bussinessId = req.params.bussinessId
     const bookId = req.params.bookId
-    await client.finishBook(clientId, bid, bookId)
+    await books.finishBook({clientId, bussinessId, bookId})
     res.send({status: "ok"})
 })
 
