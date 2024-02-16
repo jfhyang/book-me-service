@@ -4,17 +4,28 @@ const books = require("../models/books")
 const weixinUtil = require("../utils/weixin-util")
 
 router.get("/books/:bussinessId", async (req, res) => {
-    const clientId = weixinUtil.getOpenId(req)
-    const bussinessId = req.params.bussinessId
-    res.send(await books.getUnfinishedBooksForClient({clientId, bussinessId}))
+    try{
+        const clientId = weixinUtil.getOpenId(req)
+        const bussinessId = req.params.bussinessId
+        const books = await books.getBooksForClient({clientId, bussinessId})
+        res.send({status: "ok", books})
+    }catch(e){
+        console.error(e)
+        res.status(500).send({status: "error", message: e.message})
+    }
 })
 
 router.delete("/books/:bussinessId/:bookId", async (req, res) => {
-    const clientId = weixinUtil.getOpenId(req)
-    const bussinessId = req.params.bussinessId
-    const bookId = req.params.bookId
-    await books.finishBook({clientId, bussinessId, bookId})
-    res.send({status: "ok"})
+    try{
+        const clientId = weixinUtil.getOpenId(req)
+        const bussinessId = req.params.bussinessId
+        const bookId = req.params.bookId
+        await books.finishBook({clientId, bussinessId, bookId})
+        res.send({status: "ok"})
+    }catch(e){
+        console.error(e)
+        res.status(500).send({status: "error", message: e.message})
+    }
 })
 
 module.exports = router

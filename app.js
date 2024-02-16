@@ -14,12 +14,13 @@ app.use(logger);
 const clientRouter = require("./routes/client")
 const userRouter = require("./routes/user");
 const db = require("./models/db");
+const books = require("./models/books");
 
 app.use("/api/client", clientRouter)
 app.use("/api/user", userRouter)
 
 const port = process.env.PORT || 80;
-db.createBooks()
+books.createTable()
 app.listen(port, () => {
   console.log("启动成功", port);
 });

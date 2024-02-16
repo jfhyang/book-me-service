@@ -1,8 +1,8 @@
-const mysql = require("mysql2/promise")
+const mysql2 = require("mysql2/promise")
 
 class MySql {
     constructor({host, port, user, password, database}){
-        this.pool = mysql.createPool({host,port,user,password,database})
+        this.pool = mysql2.createPool({host,port,user,password,database})
     }
 
     close(){
@@ -10,7 +10,7 @@ class MySql {
     }
 
     async query(sql, params){
-        const s = mysql.format(sql, params)
+        const s = mysql2.format(sql, params)
         console.log(s)
         return await this.pool.query(s);
     }
